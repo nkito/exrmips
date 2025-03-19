@@ -15,7 +15,7 @@ A console appliation is obtained as follows.
 $ cargo build --release
 ```
 Note that a program binary obtained with "debug" build may not work properly. It is a known bug.
-The simulator carries out additions with overflow intensionaly. However, such overflow causes "panic" when a debug-build is used.
+The simulator carries out additions with overflow intentionally. However, such overflow causes "panic" when a debug-build version is used.
 
 ### WebAssembly package
 WebAssembly version of the emulator for used in Web browsers is obtained as follows.
@@ -37,4 +37,8 @@ $ cargo run --release u-boot/firm_u-boot.bin
 ```
 Twice inputs of Ctrl+C halt the emulator.
 
+The emulator simulates 64Mbit (8MBytes) Spansion S25Fl164K SPI flash memory by default. 
+It also support 2Gbit (256MBytes) Macronix MX66U2G45G SPI flash memory and the 2Gbit flash is selected when "-f 256" option is used. 
+The emulator loads the flash ROM image before starting the emulation. 
+The image file will not be modified even if the flash is modified in emulator.
 
