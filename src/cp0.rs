@@ -23,14 +23,14 @@ pub fn load_counter_precise(ms : &mut MachineState) -> u32 {
 pub fn load_counter(ms : &mut MachineState) -> u32 {
     let counter_t  :u64 = ms.reg.c0_count_currenttime - ms.reg.c0_count_basetime;
     let counter_cyc:u64 = counter_t * ((config::FREQ_CPU/(config::CPU_FREQ_COUNT_RESOLUTION*1000*1000)) as u64);
-    let counter_cur:u64 = counter_cyc + (ms.emu.nexec_insts - ms.reg.c0_count_ninst_in_ctime) * 2;
+    let counter_cur:u64 = counter_cyc + (ms.emu.nexec_insts - ms.reg.c0_count_ninst_in_ctime);
     return counter_cur as u32;
 }
 
 pub fn load_counter_long(ms : &mut MachineState) -> u64 {
     let counter_t  :u64 = ms.reg.c0_count_currenttime - ms.reg.c0_count_basetime;
     let counter_cyc:u64 = counter_t * ((config::FREQ_CPU/(config::CPU_FREQ_COUNT_RESOLUTION*1000*1000)) as u64);
-    let counter_cur:u64 = counter_cyc + (ms.emu.nexec_insts - ms.reg.c0_count_ninst_in_ctime) * 2;
+    let counter_cur:u64 = counter_cyc + (ms.emu.nexec_insts - ms.reg.c0_count_ninst_in_ctime);
     return counter_cur;
 }
 
