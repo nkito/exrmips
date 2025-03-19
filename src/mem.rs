@@ -394,7 +394,7 @@ fn load_memory(ms : &mut MachineState, vaddr : u32, acc_width : u32) -> Result<u
     }else if paddr >= dev_uart::IOADDR_UART0_BASE && paddr < dev_uart::IOADDR_UART0_BASE+dev_uart::IOADDR_UART_SIZE {
         // UART
 
-        return Ok( accsize_align(acc_width, paddr, dev_uart::read_reg(&mut ms.uart, &mut ms.stdin_ch, paddr) as u32));
+        return Ok( accsize_align(acc_width, paddr, dev_uart::read_reg(&mut ms.uart, &mut ms.stdin_ch, align_addr) as u32));
 
     }else if paddr >= dev_soc::GPIO_BASE_REG && paddr < dev_soc::GPIO_BASE_REG+0x100 {
         // GPIO
