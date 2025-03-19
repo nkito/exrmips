@@ -15,10 +15,10 @@ A console appliation is obtained as follows.
 $ cargo build --release
 ```
 Note that a program binary obtained with "debug" build may not work properly. It is a known bug.
-The simulator carries out additions with overflow intentionally. However, such overflow causes "panic" when a debug-build version is used.
+The emulator uses additions with overflow intentionally. However, such overflow causes "panic" when a debug-build version is used.
 
 ### WebAssembly package
-WebAssembly version of the emulator for used in Web browsers is obtained as follows.
+WebAssembly version of the emulator to use it in Web browsers is obtained as follows.
 ```
 $ wasm-pack build --target web
 ```
