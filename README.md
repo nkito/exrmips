@@ -7,6 +7,8 @@ This emulator works as a console application and also works in a Web browser as 
 
 OpenWrt, a well-known Linux distribution for home routers, works in the emulator of both console application version and Web browser version.
 
+[This page](https://nkito.github.io/exrmips_web/ "OpenWrt in a browser") demonstrates the emulator. Pressing the "Use sample image" button invokes the emulator.
+
 ## Build
 
 ### Console application
