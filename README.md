@@ -50,3 +50,5 @@ It also support 2Gbit (256MBytes) Macronix MX66U2G45G SPI flash memory and the 2
 The emulator loads the flash-memory image before starting the emulation. 
 The image file will not be modified even if the flash is modified in emulator.
 
+Note that this Rust version has no support for ethernet interfaces.
+
