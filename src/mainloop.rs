@@ -55,8 +55,10 @@ pub async fn run_wasm(ms: &mut MachineState) {
             prev_exec_insts = ms.emu.nexec_insts;
 
             // Updating the CoProcessor0 Counter
-            ms.reg.c0_count_currenttime    = currenttime;
-            ms.reg.c0_count_ninst_in_ctime = ms.emu.nexec_insts;
+            if currenttime != ms.reg.c0_count_currenttime {
+                ms.reg.c0_count_currenttime    = currenttime;
+                ms.reg.c0_count_ninst_in_ctime = ms.emu.nexec_insts;
+            }
             dev_uart::read_reg(&mut ms.uart, &mut ms.stdin_ch, dev_uart::IOADDR_UART0_BASE + dev_uart::UART_REG_LINESTAT); // to update internal state
 
             if ms.misc.reset_request {
@@ -104,11 +106,6 @@ pub fn run_term(ms: &mut MachineState) {
     ms.emu.stopcount   = 0;
 
     ms.emu.debug = false;
-
-    /*
-    ms.emu.breakpoint = 0x800e55ac;
-    ms.emu.runafterbreak = 0x1000;
-    */
 
     while ms.emu.stopcount == 0 || (ms.emu.stopcount > 0 && ms.emu.stopcount >= ms.emu.nexec_insts) {
         ms.reg.r[0] = 0;
@@ -159,16 +156,10 @@ saveInstPointer(pointer);
             dev_uart::read_reg(&mut ms.uart, &mut ms.stdin_ch, dev_uart::IOADDR_UART0_BASE + dev_uart::UART_REG_LINESTAT); // to update internal state
 
 
-            // Checking the SIGINT status, treatment of Ctrl+C.
+            // Checking Ctrl+C inputs.
             if ctrlc_num.load(atomic::Ordering::Relaxed) != prev_ctrlc_num {
                 // time between two Ctrl+C keyins is shorter than 1000ms, then enter the monitor
                 if currenttime - prev_ctrlc_trig_time < 1000*1000 {
-                    /*
-                    if( emuMonitor(pM) < 0 ){
-                        // halt the system
-                        pM->mem.ioMISC.reset_request = 1;
-                    }
-                    */
                     ms.misc.reset_request = true;
                     prev_ctrlc_trig_time = 0;
                 }else{
@@ -183,7 +174,7 @@ saveInstPointer(pointer);
 
 
 
-            if ms.misc.reset_request /*|| ctrlc_num.load(atomic::Ordering::Relaxed) > 0*/ {
+            if ms.misc.reset_request {
                 print!("\r\n\r\n");
                 info!("System reset ...\r");
                 break;
