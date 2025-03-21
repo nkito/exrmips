@@ -15,14 +15,6 @@ pub const KSEG2_SIZE  : u32 = 0x20000000;
 pub const KSEG3       : u32 = 0xE0000000;
 pub const KSEG3_SIZE  : u32 = 0x20000000;
 
-/*
-pub const EXCEPT_VECT_RESET                      0xbfc00000
-pub const EXCEPT_VECT_CacheErr(ebase, bev)       ((bev)?                      0xbfc00300  : (                  0xA0000100 |((ebase)&0x1ffff000)))
-pub const EXCEPT_VECT_TLBRefill(ebase, bev, exl) ((bev)? ((exl)? 0xbfc00380 : 0xbfc00200) : (((exl)?0x80000180:0x80000000)|((ebase)&0x3ffff000)))
-pub const EXCEPT_VECT_Int(ebase, bev, iv)        ((bev)? ((iv) ? 0xbfc00400 : 0xbfc00380) : (((iv )?0x80000200:0x80000180)|((ebase)&0x3ffff000)))
-pub const EXCEPT_VECT_AllOther(ebase, bev)       ((bev)?                      0xbfc00380  : (                  0x80000180 |((ebase)&0x3ffff000)))
-*/
-
 pub const EXCEPT_VECT_RESET : u32 = 0xbfc00000;
 
 #[macro_export]

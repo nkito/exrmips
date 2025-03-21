@@ -87,9 +87,6 @@ pub const MIPS32_OP_SDC2    : u32 = 0b111_110;
 pub fn exec(ms: &mut MachineState, inst : u32) -> bool {
     let pointer : u32 = ms.reg.pc;
 
-/*
-    saveInstPointer(pointer);
-*/
     let op    : u32 = (inst>>26) & 0x3f; /* inst[31:26] */
     let rs    : usize = ((inst>>21) & 0x1f) as usize; /* inst[25:21] */
     let rt    : usize = ((inst>>16) & 0x1f) as usize; /* inst[20:16] */
