@@ -438,11 +438,10 @@ fn load_memory(ms : &mut MachineState, vaddr : u32, acc_width : u32) -> Result<u
         return match align_addr {
             dev_soc::PLL_SRIF_CPU_DPLL1_REG => Ok( accsize_align(acc_width, paddr, (1<<27 /*refdiv*/) + (10<<18 /*nint*/) + (0 /*nfrac*/)) ),
             dev_soc::PLL_SRIF_CPU_DPLL2_REG => Ok( accsize_align(acc_width, paddr, (1<<30) + (0<<13 /*outdiv*/)) ),
-            _                                 => Ok(0)
+            _                               => Ok(0)
         };
     }
 
-    //printf("[memory read: 0x%x]\n", addr);
 
     Ok(0)
 }
@@ -498,8 +497,9 @@ fn store_memory(ms : &mut MachineState, vaddr : u32, acc_width: u32, data : u32)
          * Writing SPI register, SPI_CONTROL_ADDR, may change memory mapping.
          * Therefore, address caches should be cleared.
          */
-        if paddr >= dev_spi::SPI0_BASE_ADDRESS + dev_spi::SPI_CTRL_REG && paddr < dev_spi::SPI0_BASE_ADDRESS + dev_spi::SPI_CTRL_REG + 4 &&
-            ( (ms.spi.control ^ data) & (1<<dev_spi::SPI_CTRL_BIT_REMAP_DISABLE) ) != 0 {
+        let aligned_data = wrdata_align(acc_width, paddr, data);
+        if align_addr == dev_spi::SPI0_BASE_ADDRESS + dev_spi::SPI_CTRL_REG &&
+            ( (ms.spi.control ^ aligned_data) & (1<<dev_spi::SPI_CTRL_BIT_REMAP_DISABLE) ) != 0 {
             ms.reg.pc_cache.clear();
             ms.reg.dr_cache[0].clear();
             ms.reg.dr_cache[1].clear();
@@ -507,7 +507,7 @@ fn store_memory(ms : &mut MachineState, vaddr : u32, acc_width: u32, data : u32)
             ms.reg.dw_cache[1].clear();
         }
 
-        dev_spi::write_reg(&mut ms.spi, align_addr, wrdata_align(acc_width, paddr, data) );
+        dev_spi::write_reg(&mut ms.spi, align_addr, aligned_data );
         return Ok(());
 
     }else if paddr >= dev_uart::IOADDR_UART0_BASE && paddr < dev_uart::IOADDR_UART0_BASE+dev_uart::IOADDR_UART_SIZE {
@@ -533,7 +533,6 @@ fn store_memory(ms : &mut MachineState, vaddr : u32, acc_width: u32, data : u32)
         }
     }
 
-    //printf("[memory write: 0x%x @ 0x%x]\n", data, addr);
     Ok(())
 }
 
